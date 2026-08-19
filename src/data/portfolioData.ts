@@ -95,7 +95,7 @@ export const PROJECTS_DATA: ProjectData[] = [
 export const ABOUT_DATA = {
   heading: "About",
   introText: "There's a version of me that can't scroll past a clumsy font or drive by a confusing billboard without wanting to know why - hi, I'm Isha, by the way. I studied Visual Communication at UID, Gandhinagar, then spent a year in graphic design learning craft, typography, and visual systems, and now I'm moving into UX, chasing the 'why' instead of just the 'how it looks.' That's basically how I design too; I research before I jump in, get deep into the details, and in a team, I'd rather listen first and speak second.",
-  
+
   philosophy: [
     {
       question: "What is good design?",
