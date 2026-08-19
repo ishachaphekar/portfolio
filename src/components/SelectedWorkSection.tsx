@@ -224,7 +224,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                   {/* Mobile Folder Tab */}
                   <button
                     onClick={() => handleTabClick(idx)}
-                    className={`absolute top-0 left-0 h-10 px-6 rounded-t-xl border-t border-l border-r font-headline font-bold text-xs transition-all duration-300 flex items-center ${
+                    className={`absolute top-0 left-0 h-10 w-[160px] px-4 rounded-t-xl border-t border-l border-r font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate ${
                       activeStep === idx
                         ? 'bg-white border-navy/15 text-navy shadow-md'
                         : 'bg-navy/10 border-navy/10 text-navy/60 hover:text-navy'
@@ -249,7 +249,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                     e.stopPropagation();
                     handleTabClick(0);
                   }}
-                  className={`absolute -top-10 left-0 h-10 px-7 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center border-t border-l border-r ${
+                  className={`absolute -top-10 left-0 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
                     activeStep === 0
                       ? 'bg-white border-navy/10 text-navy z-30 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
                       : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
@@ -285,7 +285,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                     e.stopPropagation();
                     handleTabClick(1);
                   }}
-                  className={`absolute -top-10 left-[150px] h-10 px-7 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center border-t border-l border-r ${
+                  className={`absolute -top-10 left-[160px] h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
                     activeStep === 1
                       ? 'bg-white border-navy/10 text-navy z-30 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
                       : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
