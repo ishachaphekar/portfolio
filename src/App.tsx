@@ -3,6 +3,7 @@ import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { SelectedWorkSection } from './components/SelectedWorkSection';
 import { AboutSection } from './components/AboutSection';
+import { TestimonialsSection } from './components/TestimonialsSection';
 import { Footer } from './components/Footer';
 import { KarmaQuestPage } from './pages/KarmaQuestPage';
 import { BeaconPage } from './pages/BeaconPage';
@@ -80,7 +81,10 @@ export const App: React.FC = () => {
       {/* 4. ABOUT SECTION */}
       <AboutSection />
 
-      {/* 5. FOOTER */}
+      {/* 5. TESTIMONIALS SECTION */}
+      <TestimonialsSection />
+
+      {/* 6. FOOTER */}
       <Footer />
     </div>
   );

@@ -274,46 +274,6 @@ export const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        {/* 6. TESTIMONIALS: WHAT PEOPLE SAY */}
-        {ABOUT_DATA.testimonials && (
-          <div className="pt-8 border-t border-mint/10">
-            <h3 className="font-sans font-bold text-[18px] text-mint uppercase tracking-wider mb-6 text-left">
-              What people say
-            </h3>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-              {ABOUT_DATA.testimonials.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-navy-light/60 p-6 md:p-8 rounded-2xl border border-mint/20 hover:border-mint/40 transition-colors flex flex-col justify-between"
-                >
-                  <p className="font-sans text-xs sm:text-sm text-offwhite/90 leading-relaxed mb-6 font-normal">
-                    {item.quote}
-                  </p>
-
-                  <div className="flex items-center gap-3.5 pt-4 border-t border-mint/10">
-                    <div className="w-[42px] h-[42px] rounded-full overflow-hidden border border-mint/30 flex-shrink-0 bg-navy">
-                      <img
-                        src={item.avatarSrc}
-                        alt={item.authorName}
-                        className="w-full h-full object-cover object-center"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-headline font-bold text-[13.5px] text-offwhite">
-                        {item.authorName}
-                      </h4>
-                      <p className="font-sans text-[12px] text-mint/80">
-                        {item.authorRole}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
       </div>
 
       {/* CLEAN CERTIFICATION IMAGE POP-UP MODAL (NO BOXES, NO TEXT, NATURAL IMAGE ASPECT) */}
