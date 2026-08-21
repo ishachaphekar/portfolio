@@ -3,4 +3,5 @@ export interface ArchiveImage {
     subTitle: string
     fileName: string
     orientation: 'portrait' | 'landscape' | 'square'
+    aspectRatio?: number
 }

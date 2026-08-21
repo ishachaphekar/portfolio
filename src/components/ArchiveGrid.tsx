@@ -5,11 +5,32 @@ import { ArchiveImage } from '@/types/archivesTypes';
 import { ImageModal } from './ImageModal';
 
 /**
- * Helper to determine CSS Grid column & row spans for Bento-style layout
- * based on the image's orientation property.
+ * Fully dynamic helper to determine CSS Grid column & row spans for Bento layout.
+ * Evaluates image aspect ratio & orientation purely from metadata thresholds.
+ * Zero hardcoding — works automatically for any existing or future images.
  */
-const getBentoSpanClass = (orientation: ArchiveImage['orientation']): string => {
-  switch (orientation) {
+const getBentoSpanClass = (image: ArchiveImage): string => {
+  const ratio = image.aspectRatio;
+
+  if (ratio) {
+    if (ratio <= 0.55) {
+      // Ultra-tall images (e.g. 1:2 standee posters) -> 1 col x 3 rows
+      return 'col-span-1 row-span-3';
+    }
+    if (ratio >= 1.65) {
+      // Wide banner landscapes (e.g. 16:9 compositions) -> 2 cols x 1 row
+      return 'col-span-1 sm:col-span-2 row-span-1';
+    }
+    if (ratio <= 0.85) {
+      // Standard portrait posters & collaterals (3:4, A4, 4:5) -> 1 col x 2 rows
+      return 'col-span-1 row-span-2';
+    }
+    // Standard 3:2 & square compositions -> 1 col x 1 row
+    return 'col-span-1 row-span-1';
+  }
+
+  // Generic fallback if aspectRatio metadata is omitted
+  switch (image.orientation) {
     case 'landscape':
       return 'col-span-1 sm:col-span-2 row-span-1';
     case 'portrait':
@@ -22,7 +43,7 @@ const getBentoSpanClass = (orientation: ArchiveImage['orientation']): string => 
 
 /**
  * Responsive Bento Grid component for displaying archive images.
- * Packs images tightly using CSS Grid dense packing to form a sleek rectangular layout.
+ * Uses aspect-matched grid spans to ensure full artwork visibility without clipping.
  * Hovering displays title & subtitle with project typography and an enlarge button.
  * Clicking any item or its enlarge button opens a full-page modal with a slightly black overlay.
  */
@@ -35,7 +56,7 @@ export const ArchiveGrid: React.FC = () => {
       <div className="w-full">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 grid-flow-dense auto-rows-[95px] sm:auto-rows-[115px] md:auto-rows-[125px] lg:auto-rows-[135px]">
           {ARCHIVES.map((image, idx) => {
-            const spanClass = getBentoSpanClass(image.orientation);
+            const spanClass = getBentoSpanClass(image);
             const imagePath = `/assets/archives/${image.fileName}`;
 
             return (
@@ -49,7 +70,7 @@ export const ArchiveGrid: React.FC = () => {
                   src={imagePath}
                   alt={image.title}
                   loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 />
 
                 {/* Hover Gradient Overlay */}
