@@ -107,6 +107,7 @@ export const ARCHIVES: ArchiveImage[] = [
         title: "Visual System Exploration III",
         subTitle: "Visual Design & Composition",
         fileName: "Visual design 3.webp",
+        // fileName: "Visual design 3.jpg",
         orientation: "landscape",
         aspectRatio: 1.71,
     },
