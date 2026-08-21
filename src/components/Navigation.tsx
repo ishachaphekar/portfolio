@@ -28,11 +28,15 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
   }, []);
 
   useEffect(() => {
-    const sectionIds = ['work', 'about', 'archives'];
+    const sectionIds = ['work', 'about'];
 
     const handleScroll = () => {
       if (window.location.pathname !== '/') {
-        setActiveSection(null);
+        if (window.location.pathname === '/archives') {
+          setActiveSection('archives');
+        } else {
+          setActiveSection(null);
+        }
         return;
       }
 
@@ -52,14 +56,6 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
         }
       }
 
-      // Check if scrolled near the bottom of page
-      if (
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 80
-      ) {
-        currentSection = 'archives';
-      }
-
       setActiveSection(currentSection);
     };
 
@@ -69,8 +65,18 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent, sectionId?: string) => {
+  const handleNavClick = (e: React.MouseEvent, sectionId?: string, isRoute?: boolean, routePath?: string) => {
     e.preventDefault();
+    if (isRoute && routePath) {
+      setActiveSection(sectionId || null);
+      if (onNavigate) {
+        onNavigate(routePath);
+      } else {
+        window.location.pathname = routePath;
+      }
+      return;
+    }
+
     setActiveSection(sectionId || null);
     if (onNavigate) {
       onNavigate('/', sectionId);
@@ -89,7 +95,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
   const navItems = [
     { id: 'work', label: 'Work', href: '/#work' },
     { id: 'about', label: 'About', href: '/#about' },
-    { id: 'archives', label: 'Archives', href: '/#archives' },
+    { id: 'archives', label: 'Archives', href: '/archives', isRoute: true },
   ];
 
   return (
@@ -120,7 +126,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
               <a
                 key={item.id}
                 href={item.href}
-                onClick={(e) => handleNavClick(e, item.id)}
+                onClick={(e) => handleNavClick(e, item.id, item.isRoute, item.href)}
                 className={`text-xs md:text-sm font-sans relative py-1 transition-colors cursor-pointer ${
                   isActive
                     ? 'text-mint font-semibold'

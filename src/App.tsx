@@ -3,10 +3,10 @@ import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { SelectedWorkSection } from './components/SelectedWorkSection';
 import { AboutSection } from './components/AboutSection';
-import { ArchivesAnchor } from './components/ArchivesAnchor';
 import { Footer } from './components/Footer';
 import { KarmaQuestPage } from './pages/KarmaQuestPage';
 import { BeaconPage } from './pages/BeaconPage';
+import { ArchivesPage } from './pages/ArchivesPage';
 
 export const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
@@ -57,6 +57,15 @@ export const App: React.FC = () => {
     );
   }
 
+  if (currentPath === '/archives') {
+    return (
+      <div className="min-h-screen bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+        <ArchivesPage onNavigate={navigateTo} />
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
       {/* 1. NAVIGATION */}
@@ -71,10 +80,7 @@ export const App: React.FC = () => {
       {/* 4. ABOUT SECTION */}
       <AboutSection />
 
-      {/* 5. ARCHIVES PLACEHOLDER ANCHOR */}
-      <ArchivesAnchor />
-
-      {/* 6. FOOTER */}
+      {/* 5. FOOTER */}
       <Footer />
     </div>
   );
