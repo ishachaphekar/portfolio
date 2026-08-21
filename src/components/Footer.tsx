@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
         {/* BOTTOM SECTION: Copyright + Image Icon Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans text-offwhite/50">
           <div>
-            © 2026 Isha Chaphekar. Designed with Figma, Antigravity and overthinking.
+            © 2026 Isha Chaphekar. Designed with Antigravity, Spotify and lots of overthinking!!
           </div>
 
           {/* LinkedIn & Behance Rounded Rectangle Icon Buttons */}

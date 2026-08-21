@@ -10,6 +10,8 @@ interface ProjectItem {
   outcome: string;
   imageSrc: string;
   route: string;
+  imageClassName?: string;
+  isUpcoming?: boolean;
 }
 
 const PROJECTS: ProjectItem[] = [
@@ -33,6 +35,18 @@ const PROJECTS: ProjectItem[] = [
     imageSrc: '/beacon-preview.png',
     route: '/projects/beacon',
   },
+  {
+    id: 'nirogya',
+    title: 'Nirogya',
+    description: 'Connecting tier-3 and rural patients to doctor consultations and licensed local pharmacies, from diagnosis to doorstep.',
+    role: 'Solo UX/UI designer and researcher',
+    timeline: '2 weeks',
+    outcome: 'An end-to-end healthcare platform prototype, spanning telemedicine and pharmacy fulfillment, along with its brand identity and supporting research.',
+    imageSrc: '/assets/Project container mockup image.png',
+    route: '/projects/nirogya',
+    imageClassName: 'scale-[1.47] -translate-y-6 md:-translate-y-8',
+    isUpcoming: true,
+  },
 ];
 
 interface SelectedWorkSectionProps {
@@ -42,16 +56,24 @@ interface SelectedWorkSectionProps {
 // Project card with attached image & three-column information strip
 const ProjectCard: React.FC<{ project: ProjectItem; onClick?: () => void }> = ({ project, onClick }) => (
   <div
-    onClick={onClick}
+    onClick={project.isUpcoming ? undefined : onClick}
     className="bg-gradient-to-br from-white via-white to-mint/10 rounded-b-3xl rounded-tr-3xl border border-navy/10 p-6 md:p-10 shadow-xl flex flex-col justify-between min-h-[540px] md:min-h-[600px] w-full relative z-10 cursor-pointer group"
   >
     {/* THREE-COLUMN INFORMATION STRIP */}
     <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pb-6 border-b border-navy/10 items-start">
       {/* COLUMN 1: Heading & Subline */}
       <div className="md:col-span-4 space-y-2">
-        <h3 className="font-headline font-bold text-2xl md:text-3xl text-navy group-hover:text-coral transition-colors">
-          {project.title}
-        </h3>
+        <div className="flex items-center gap-3 flex-wrap">
+          <h3 className="font-headline font-bold text-2xl md:text-3xl text-navy group-hover:text-coral transition-colors">
+            {project.title}
+          </h3>
+          {project.isUpcoming && (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mint/10 border border-mint/30 text-navy font-sans font-medium text-xs">
+              <span className="h-2 w-2 rounded-full bg-coral" />
+              <span>Upcoming</span>
+            </div>
+          )}
+        </div>
         <p className="font-sans text-sm text-navy/80 leading-relaxed">
           {project.description}
         </p>
@@ -94,7 +116,9 @@ const ProjectCard: React.FC<{ project: ProjectItem; onClick?: () => void }> = ({
       <img
         src={project.imageSrc}
         alt={project.title}
-        className="w-full h-full object-cover object-center rounded-2xl shadow-sm transition-transform duration-500 group-hover:scale-102"
+        className={`w-full h-full object-cover object-center rounded-2xl shadow-sm transition-transform duration-500 ${
+          project.imageClassName || 'group-hover:scale-102'
+        }`}
       />
     </div>
   </div>
@@ -131,7 +155,14 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
       const offset = -rect.top;
       const progress = Math.max(0, Math.min(1, offset / totalScrollable));
       setScrollProgress(progress);
-      setActiveStep(progress < 0.5 ? 0 : 1);
+      
+      if (progress < 0.35) {
+        setActiveStep(0);
+      } else if (progress < 0.70) {
+        setActiveStep(1);
+      } else {
+        setActiveStep(2);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -142,34 +173,54 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
   const handleTabClick = (idx: number) => {
     if (!isMobile && sectionRef.current) {
       const totalScrollable = sectionRef.current.offsetHeight - window.innerHeight;
-      const target =
-        sectionRef.current.offsetTop + (idx === 0 ? totalScrollable * 0.2 : totalScrollable * 0.8);
+      let targetRatio = 0.1;
+      if (idx === 1) targetRatio = 0.5;
+      if (idx === 2) targetRatio = 0.9;
+      const target = sectionRef.current.offsetTop + totalScrollable * targetRatio;
       window.scrollTo({ top: target, behavior: 'smooth' });
     } else {
       setActiveStep(idx);
     }
   };
 
-  // Beacon slide-up calculation: 0.40 → 0.75 progress range
-  const SLIDE_START = 0.40;
-  const SLIDE_END = 0.75;
+  // Beacon slide-up calculation: 0.20 → 0.45 progress range
+  const BEACON_SLIDE_START = 0.20;
+  const BEACON_SLIDE_END = 0.45;
   
   const beaconTranslateY =
-    scrollProgress < SLIDE_START
+    scrollProgress < BEACON_SLIDE_START
       ? 100
-      : scrollProgress >= SLIDE_END
+      : scrollProgress >= BEACON_SLIDE_END
       ? 0
-      : 100 - ((scrollProgress - SLIDE_START) / (SLIDE_END - SLIDE_START)) * 100;
+      : 100 - ((scrollProgress - BEACON_SLIDE_START) / (BEACON_SLIDE_END - BEACON_SLIDE_START)) * 100;
 
-  // Opacity: hide Beacon and its tab when KarmaQuest is active (scrollProgress < 0.40)
+  // Opacity: hide Beacon and its tab when KarmaQuest is active (scrollProgress < 0.20)
   const beaconOpacity =
-    scrollProgress < SLIDE_START
+    scrollProgress < BEACON_SLIDE_START
       ? 0
-      : Math.min(1, (scrollProgress - SLIDE_START) / 0.08);
+      : Math.min(1, (scrollProgress - BEACON_SLIDE_START) / 0.08);
+
+  // Nirogya slide-up calculation: 0.55 → 0.80 progress range
+  const NIROGYA_SLIDE_START = 0.55;
+  const NIROGYA_SLIDE_END = 0.80;
+
+  const nirogyaTranslateY =
+    scrollProgress < NIROGYA_SLIDE_START
+      ? 100
+      : scrollProgress >= NIROGYA_SLIDE_END
+      ? 0
+      : 100 - ((scrollProgress - NIROGYA_SLIDE_START) / (NIROGYA_SLIDE_END - NIROGYA_SLIDE_START)) * 100;
+
+  // Opacity: hide Nirogya and its tab when scrollProgress < 0.55
+  const nirogyaOpacity =
+    scrollProgress < NIROGYA_SLIDE_START
+      ? 0
+      : Math.min(1, (scrollProgress - NIROGYA_SLIDE_START) / 0.08);
 
   const activeProject = PROJECTS[activeStep];
 
   const handleCardClick = (project: ProjectItem) => {
+    if (project.isUpcoming) return;
     if (onNavigate) {
       onNavigate(project.route);
     } else {
@@ -182,7 +233,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
       id="work"
       ref={sectionRef}
       className={`relative bg-offwhite text-navy m-0 ${
-        isMobile ? 'py-16 px-6' : 'h-[200vh] px-6 md:px-12'
+        isMobile ? 'pt-28 pb-36 px-6' : 'h-[340vh] pt-16 pb-32 px-6 md:px-12'
       }`}
     >
       {/* STICKY INNER WRAPPER */}
@@ -190,7 +241,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
         className={
           isMobile
             ? 'w-full max-w-5xl mx-auto'
-            : 'sticky top-20 max-w-5xl mx-auto py-4'
+            : 'sticky top-28 max-w-5xl mx-auto pt-6 pb-16'
         }
         style={{ position: isMobile ? undefined : 'sticky' }}
       >
@@ -199,7 +250,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
         <div className="absolute -right-32 bottom-1/4 w-80 h-80 bg-coral/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* SECTION HEADING */}
-        <div className="text-left mb-8 relative z-10">
+        <div className="text-left pt-4 mb-12 relative z-10">
           <h2 className="font-headline font-bold text-[32px] sm:text-[45px] text-navy tracking-tight leading-tight">
             Selected Work
           </h2>
@@ -208,7 +259,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
         {/*
          * CARD STACK CONTAINER WITH FOLDER TABS
          * Card 0 (KarmaQuest) is visible initially with its tab.
-         * Card 1 (Beacon) & its tab remain completely hidden (opacity 0) until scroll progresses.
+         * Card 1 (Beacon) & Card 2 (Nirogya) remain completely hidden until scroll progresses.
          */}
         <div
           className="relative overflow-visible rounded-3xl z-10"
@@ -266,7 +317,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
 
               {/*
                * BEACON CARD CONTAINER & FOLDER TAB
-               * Completely hidden (opacity 0, pointer-events none) when KarmaQuest is active.
+               * Completely hidden when KarmaQuest is active.
                * Fades in and slides up seamlessly when user scrolls.
                */}
               <div
@@ -297,6 +348,42 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                 <ProjectCard
                   project={PROJECTS[1]}
                   onClick={() => handleCardClick(PROJECTS[1])}
+                />
+              </div>
+
+              {/*
+               * NIROGYA CARD CONTAINER & FOLDER TAB
+               * Completely hidden when scrollProgress < 0.55.
+               * Fades in and slides up seamlessly as user scrolls further down.
+               */}
+              <div
+                className="absolute inset-x-0 top-10 bottom-0"
+                style={{
+                  zIndex: 30,
+                  transform: `translateY(${nirogyaTranslateY}%)`,
+                  opacity: nirogyaOpacity,
+                  pointerEvents: nirogyaOpacity === 0 ? 'none' : 'auto',
+                  transition: 'transform 40ms linear, opacity 120ms ease-out',
+                }}
+              >
+                {/* Nirogya Folder Tab */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleTabClick(2);
+                  }}
+                  className={`absolute -top-10 left-[320px] h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
+                    activeStep === 2
+                      ? 'bg-white border-navy/10 text-navy z-30 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
+                      : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
+                  }`}
+                >
+                  {PROJECTS[2].title}
+                </button>
+
+                <ProjectCard
+                  project={PROJECTS[2]}
+                  onClick={() => handleCardClick(PROJECTS[2])}
                 />
               </div>
             </div>

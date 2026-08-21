@@ -89,6 +89,22 @@ export const PROJECTS_DATA: ProjectData[] = [
       subtitle: "End-to-end Figma prototype, student analytics flow, and component library",
       tag: "Interactive Prototype — Figma"
     }
+  },
+  {
+    id: "nirogya",
+    label: "PROJECT 03",
+    title: "Nirogya",
+    description: "Connecting tier-3 and rural patients to doctor consultations and licensed local pharmacies, from diagnosis to doorstep.",
+    role: "Solo UX/UI designer and researcher · 2 Weeks",
+    outcome: "An end-to-end healthcare platform prototype, spanning telemedicine and pharmacy fulfillment, along with its brand identity and supporting research.",
+    processStat: "2-week sprint",
+    accentColor: "#00817D",
+    tags: ["Telemedicine", "Healthcare", "UX Research", "Pharmacy Fulfillment"],
+    imagePlaceholder: {
+      title: "Nirogya Healthcare Platform",
+      subtitle: "Telemedicine consultations & pharmacy fulfillment prototype",
+      tag: "Interactive Prototype — Figma"
+    }
   }
 ];
 
