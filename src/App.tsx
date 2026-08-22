@@ -42,7 +42,7 @@ export const App: React.FC = () => {
 
   if (currentPath === '/projects/karmaquest') {
     return (
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+      <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
         <KarmaQuestPage onNavigate={navigateTo} />
         <Footer />
       </div>
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
 
   if (currentPath === '/projects/beacon') {
     return (
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+      <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
         <BeaconPage onNavigate={navigateTo} />
         <Footer />
       </div>
@@ -60,7 +60,7 @@ export const App: React.FC = () => {
 
   if (currentPath === '/archives') {
     return (
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+      <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
         <ArchivesPage onNavigate={navigateTo} />
         <Footer />
       </div>
@@ -68,7 +68,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+    <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
       {/* 1. NAVIGATION */}
       <Navigation onNavigate={navigateTo} />
 

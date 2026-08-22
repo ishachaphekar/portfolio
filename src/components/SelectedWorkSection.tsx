@@ -146,78 +146,44 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
   // Scroll-linked progress (desktop only)
   useEffect(() => {
     if (isMobile) return;
+    
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
+      const STICKY_TOP = 96; // matches sticky top-24 (96px offset)
       const totalScrollable = sectionRef.current.offsetHeight - window.innerHeight;
       if (totalScrollable <= 0) return;
 
-      const offset = -rect.top;
+      const offset = STICKY_TOP - rect.top;
       const progress = Math.max(0, Math.min(1, offset / totalScrollable));
       setScrollProgress(progress);
       
-      if (progress < 0.35) {
-        setActiveStep(0);
-      } else if (progress < 0.70) {
-        setActiveStep(1);
-      } else {
-        setActiveStep(2);
-      }
+      const totalTransitions = Math.max(1, PROJECTS.length - 1);
+      const step = Math.min(
+        PROJECTS.length - 1,
+        Math.floor(progress * totalTransitions + 0.5)
+      );
+      setActiveStep(step);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobile]);
 
   // Tab click handler
   const handleTabClick = (idx: number) => {
     if (!isMobile && sectionRef.current) {
+      const STICKY_TOP = 96;
       const totalScrollable = sectionRef.current.offsetHeight - window.innerHeight;
-      let targetRatio = 0.1;
-      if (idx === 1) targetRatio = 0.5;
-      if (idx === 2) targetRatio = 0.9;
-      const target = sectionRef.current.offsetTop + totalScrollable * targetRatio;
-      window.scrollTo({ top: target, behavior: 'smooth' });
+      const totalTransitions = Math.max(1, PROJECTS.length - 1);
+      const targetProgress = idx / totalTransitions;
+      const targetScroll = sectionRef.current.offsetTop - STICKY_TOP + totalScrollable * targetProgress;
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
     } else {
       setActiveStep(idx);
     }
   };
-
-  // Beacon slide-up calculation: 0.20 → 0.45 progress range
-  const BEACON_SLIDE_START = 0.20;
-  const BEACON_SLIDE_END = 0.45;
-  
-  const beaconTranslateY =
-    scrollProgress < BEACON_SLIDE_START
-      ? 100
-      : scrollProgress >= BEACON_SLIDE_END
-      ? 0
-      : 100 - ((scrollProgress - BEACON_SLIDE_START) / (BEACON_SLIDE_END - BEACON_SLIDE_START)) * 100;
-
-  // Opacity: hide Beacon and its tab when KarmaQuest is active (scrollProgress < 0.20)
-  const beaconOpacity =
-    scrollProgress < BEACON_SLIDE_START
-      ? 0
-      : Math.min(1, (scrollProgress - BEACON_SLIDE_START) / 0.08);
-
-  // Nirogya slide-up calculation: 0.55 → 0.80 progress range
-  const NIROGYA_SLIDE_START = 0.55;
-  const NIROGYA_SLIDE_END = 0.80;
-
-  const nirogyaTranslateY =
-    scrollProgress < NIROGYA_SLIDE_START
-      ? 100
-      : scrollProgress >= NIROGYA_SLIDE_END
-      ? 0
-      : 100 - ((scrollProgress - NIROGYA_SLIDE_START) / (NIROGYA_SLIDE_END - NIROGYA_SLIDE_START)) * 100;
-
-  // Opacity: hide Nirogya and its tab when scrollProgress < 0.55
-  const nirogyaOpacity =
-    scrollProgress < NIROGYA_SLIDE_START
-      ? 0
-      : Math.min(1, (scrollProgress - NIROGYA_SLIDE_START) / 0.08);
-
-  const activeProject = PROJECTS[activeStep];
 
   const handleCardClick = (project: ProjectItem) => {
     if (project.isUpcoming) return;
@@ -228,12 +194,19 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
     }
   };
 
+  const activeProject = PROJECTS[activeStep];
+  const totalTransitions = Math.max(1, PROJECTS.length - 1);
+
+  // Dynamic runway height tied to number of project cards (85vh per card transition)
+  const dynamicSectionHeight = isMobile ? 'auto' : `${100 + totalTransitions * 85}vh`;
+
   return (
     <section
       id="work"
       ref={sectionRef}
-      className={`relative bg-offwhite text-navy m-0 overflow-hidden ${
-        isMobile ? 'pt-28 pb-36 px-6' : 'h-[340vh] pt-16 pb-32 px-6 md:px-12'
+      style={{ height: dynamicSectionHeight }}
+      className={`relative bg-offwhite text-navy m-0 overflow-x-clip ${
+        isMobile ? 'py-8 px-6' : 'py-8 px-6 md:px-12'
       }`}
     >
       {/* STICKY INNER WRAPPER */}
@@ -241,26 +214,21 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
         className={
           isMobile
             ? 'w-full max-w-5xl mx-auto'
-            : 'sticky top-28 max-w-5xl mx-auto pt-6 pb-16'
+            : 'sticky top-24 max-w-5xl mx-auto py-2'
         }
-        style={{ position: isMobile ? undefined : 'sticky' }}
       >
         {/* Decorative background blobs */}
         <div className="absolute -left-32 top-1/4 w-72 h-72 bg-mint/40 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -right-32 bottom-1/4 w-80 h-80 bg-coral/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* SECTION HEADING */}
-        <div className="text-left pt-4 mb-12 relative z-10">
+        <div className="text-left pt-2 mb-8 relative z-10">
           <h2 className="font-headline font-bold text-[32px] sm:text-[45px] text-navy tracking-tight leading-tight">
             Selected Work
           </h2>
         </div>
 
-        {/*
-         * CARD STACK CONTAINER WITH FOLDER TABS
-         * Card 0 (KarmaQuest) is visible initially with its tab.
-         * Card 1 (Beacon) & Card 2 (Nirogya) remain completely hidden until scroll progresses.
-         */}
+        {/* CARD STACK CONTAINER WITH FOLDER TABS */}
         <div
           className="relative overflow-visible rounded-3xl z-10"
           style={{ cursor: isCardHovered && !isMobile ? 'none' : 'auto' }}
@@ -292,100 +260,93 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
             </div>
           ) : (
             <div className="relative pt-10">
-              {/* KARMAQUEST CARD CONTAINER (Base layer, visible initially) */}
-              <div className="relative z-10">
-                {/* KarmaQuest Folder Tab */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleTabClick(0);
-                  }}
-                  className={`absolute -top-10 left-0 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
-                    activeStep === 0
-                      ? 'bg-white border-navy/10 text-navy z-30 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
-                      : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
-                  }`}
-                >
-                  {PROJECTS[0].title}
-                </button>
+              {/* Folder Tabs Accumulation Header */}
+              <div className="absolute top-0 left-0 right-0 h-10 z-50 pointer-events-auto">
+                {PROJECTS.map((project, idx) => {
+                  const isActiveTab = activeStep === idx;
+                  const tabLeftOffset = idx * 165;
+                  const slideStart = idx > 0 ? (idx - 1) / totalTransitions : 0;
+                  // Tab is visible once scroll reaches its slide range or if it is card 0
+                  const isTabVisible = idx === 0 || scrollProgress >= slideStart - 0.05;
 
-                <ProjectCard
-                  project={PROJECTS[0]}
-                  onClick={() => handleCardClick(PROJECTS[0])}
-                />
+                  return (
+                    <button
+                      key={`tab-${project.id}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTabClick(idx);
+                      }}
+                      style={{
+                        left: `${tabLeftOffset}px`,
+                        opacity: isTabVisible ? 1 : 0,
+                        pointerEvents: isTabVisible ? 'auto' : 'none',
+                        zIndex: isActiveTab ? 50 : 20 + idx,
+                      }}
+                      className={`absolute top-0 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
+                        isActiveTab
+                          ? 'bg-white border-navy/10 text-navy shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
+                          : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy backdrop-blur-xs'
+                      }`}
+                    >
+                      {project.title}
+                    </button>
+                  );
+                })}
               </div>
 
-              {/*
-               * BEACON CARD CONTAINER & FOLDER TAB
-               * Completely hidden when KarmaQuest is active.
-               * Fades in and slides up seamlessly when user scrolls.
-               */}
-              <div
-                className="absolute inset-x-0 top-10 bottom-0"
-                style={{
-                  zIndex: 20,
-                  transform: `translateY(${beaconTranslateY}%)`,
-                  opacity: beaconOpacity,
-                  pointerEvents: beaconOpacity === 0 ? 'none' : 'auto',
-                  transition: 'transform 40ms linear, opacity 120ms ease-out',
-                }}
-              >
-                {/* Beacon Folder Tab */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleTabClick(1);
-                  }}
-                  className={`absolute -top-10 left-[160px] h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
-                    activeStep === 1
-                      ? 'bg-white border-navy/10 text-navy z-30 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
-                      : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
-                  }`}
-                >
-                  {PROJECTS[1].title}
-                </button>
+              {/* Stacked Project Cards */}
+              {PROJECTS.map((project, idx) => {
+                let translateY = 0;
+                let opacity = 1;
+                let pointerEvents: 'auto' | 'none' = 'auto';
 
-                <ProjectCard
-                  project={PROJECTS[1]}
-                  onClick={() => handleCardClick(PROJECTS[1])}
-                />
-              </div>
+                if (idx > 0) {
+                  const slideStart = (idx - 1) / totalTransitions;
+                  const slideEnd = idx / totalTransitions;
 
-              {/*
-               * NIROGYA CARD CONTAINER & FOLDER TAB
-               * Completely hidden when scrollProgress < 0.55.
-               * Fades in and slides up seamlessly as user scrolls further down.
-               */}
-              <div
-                className="absolute inset-x-0 top-10 bottom-0"
-                style={{
-                  zIndex: 30,
-                  transform: `translateY(${nirogyaTranslateY}%)`,
-                  opacity: nirogyaOpacity,
-                  pointerEvents: nirogyaOpacity === 0 ? 'none' : 'auto',
-                  transition: 'transform 40ms linear, opacity 120ms ease-out',
-                }}
-              >
-                {/* Nirogya Folder Tab */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleTabClick(2);
-                  }}
-                  className={`absolute -top-10 left-[320px] h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
-                    activeStep === 2
-                      ? 'bg-white border-navy/10 text-navy z-30 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
-                      : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
-                  }`}
-                >
-                  {PROJECTS[2].title}
-                </button>
+                  if (scrollProgress < slideStart) {
+                    translateY = 100;
+                    opacity = 0;
+                    pointerEvents = 'none';
+                  } else if (scrollProgress >= slideEnd) {
+                    translateY = 0;
+                    opacity = 1;
+                    pointerEvents = 'auto';
+                  } else {
+                    const ratio = (scrollProgress - slideStart) / (slideEnd - slideStart);
+                    translateY = (1 - ratio) * 100;
+                    opacity = Math.min(1, ratio / 0.15); // smooth fade-in during initial 15% slide
+                    pointerEvents = 'auto';
+                  }
+                }
 
-                <ProjectCard
-                  project={PROJECTS[2]}
-                  onClick={() => handleCardClick(PROJECTS[2])}
-                />
-              </div>
+                return (
+                  <div
+                    key={project.id}
+                    className={
+                      idx === 0
+                        ? 'relative z-10'
+                        : 'absolute top-10 left-0 right-0 w-full'
+                    }
+                    style={
+                      idx === 0
+                        ? undefined
+                        : {
+                            zIndex: 10 + idx * 10,
+                            transform: `translateY(${translateY}%)`,
+                            opacity: opacity,
+                            pointerEvents: pointerEvents,
+                            willChange: 'transform, opacity',
+                          }
+                    }
+                  >
+                    <ProjectCard
+                      project={project}
+                      onClick={() => handleCardClick(project)}
+                    />
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
