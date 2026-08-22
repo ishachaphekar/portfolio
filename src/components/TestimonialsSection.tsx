@@ -23,11 +23,11 @@ export const TestimonialsSection: React.FC = () => {
         </div>
 
         {/* TESTIMONIAL CARDS GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {ABOUT_DATA.testimonials.map((item) => (
             <div
               key={item.id}
-              className="bg-navy-light/95 p-6 md:p-8 rounded-2xl border border-mint/20 hover:border-mint/40 transition-colors flex flex-col justify-between shadow-lg text-offwhite"
+              className="bg-navy-light p-6 md:p-8 rounded-2xl border-2 border-mint/10 hover:border-mint transition-colors flex flex-col justify-between shadow-lg text-offwhite"
             >
               <p className="font-sans text-xs sm:text-sm text-offwhite/90 leading-relaxed mb-6 font-normal">
                 {item.quote}

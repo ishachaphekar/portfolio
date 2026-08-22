@@ -127,11 +127,10 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                 key={item.id}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.id, item.isRoute, item.href)}
-                className={`text-xs md:text-sm font-sans relative py-1 transition-colors cursor-pointer ${
-                  isActive
+                className={`text-xs md:text-sm font-sans relative py-1 transition-colors cursor-pointer ${isActive
                     ? 'text-mint font-semibold'
                     : 'font-medium text-offwhite/80 hover:text-mint after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-mint hover:after:w-full after:transition-all'
-                }`}
+                  }`}
               >
                 {item.label}
               </a>
@@ -140,7 +139,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
 
           {/* RESUME BUTTON: #0d2b49 background, 1px Coral stroke, rounded-[10px], no download icon */}
           <a
-            href="/Isha_Chaphekar_Resume.pdf"
+            href="https://drive.google.com/file/d/1EKU9CL8M1yHmD2kVEIXG1PH8T5zNTIHl/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-4 py-1.5 rounded-[10px] bg-[#0d2b49] border border-[#FF6B4A] text-[#FF6B4A] font-sans font-bold text-xs hover:bg-[#FF6B4A] hover:text-[#00203F] transition-all duration-200 shadow-sm"
