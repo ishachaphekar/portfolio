@@ -260,41 +260,6 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
             </div>
           ) : (
             <div className="relative pt-10">
-              {/* Folder Tabs Accumulation Header */}
-              <div className="absolute top-0 left-0 right-0 h-10 z-50 pointer-events-auto">
-                {PROJECTS.map((project, idx) => {
-                  const isActiveTab = activeStep === idx;
-                  const tabLeftOffset = idx * 165;
-                  const slideStart = idx > 0 ? (idx - 1) / totalTransitions : 0;
-                  // Tab is visible once scroll reaches its slide range or if it is card 0
-                  const isTabVisible = idx === 0 || scrollProgress >= slideStart - 0.05;
-
-                  return (
-                    <button
-                      key={`tab-${project.id}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleTabClick(idx);
-                      }}
-                      style={{
-                        left: `${tabLeftOffset}px`,
-                        opacity: isTabVisible ? 1 : 0,
-                        pointerEvents: isTabVisible ? 'auto' : 'none',
-                        zIndex: isActiveTab ? 50 : 20 + idx,
-                      }}
-                      className={`absolute top-0 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate border-t border-l border-r ${
-                        isActiveTab
-                          ? 'bg-white border-navy/10 text-navy shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
-                          : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy backdrop-blur-xs'
-                      }`}
-                    >
-                      {project.title}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Stacked Project Cards */}
               {PROJECTS.map((project, idx) => {
                 let translateY = 0;
                 let opacity = 1;
@@ -315,10 +280,17 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                   } else {
                     const ratio = (scrollProgress - slideStart) / (slideEnd - slideStart);
                     translateY = (1 - ratio) * 100;
-                    opacity = Math.min(1, ratio / 0.15); // smooth fade-in during initial 15% slide
+                    opacity = Math.min(1, ratio / 0.15); // smooth 15% initial fade-in
                     pointerEvents = 'auto';
                   }
                 }
+
+                const isActiveTab = activeStep === idx;
+                const tabLeftOffset = idx * 165; // side-by-side accumulation
+
+                // Tab appears only as the card completes its slide into position at top
+                const slideEnd = idx > 0 ? idx / totalTransitions : 0;
+                const isTabVisible = idx === 0 || scrollProgress >= slideEnd - 0.08;
 
                 return (
                   <div
@@ -340,6 +312,27 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                           }
                     }
                   >
+                    {/* Folder Tab */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTabClick(idx);
+                      }}
+                      style={{
+                        left: `${tabLeftOffset}px`,
+                        opacity: isTabVisible ? 1 : 0,
+                        pointerEvents: isTabVisible ? 'auto' : 'none',
+                        transition: 'opacity 200ms ease-out',
+                      }}
+                      className={`absolute -top-10 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs flex items-center justify-center truncate border-t border-l border-r ${
+                        isActiveTab
+                          ? 'bg-white border-navy/10 text-navy z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
+                          : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
+                      }`}
+                    >
+                      {project.title}
+                    </button>
+
                     <ProjectCard
                       project={project}
                       onClick={() => handleCardClick(project)}
