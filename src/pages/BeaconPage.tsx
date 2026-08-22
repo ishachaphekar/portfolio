@@ -38,6 +38,9 @@ interface BeaconPageProps {
 export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('overview');
+  const [isLightSection, setIsLightSection] = useState<boolean>(false);
+  const [sliderTop, setSliderTop] = useState<number>(5);
+  const navItemRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const [isPastProjectEnd, setIsPastProjectEnd] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -62,6 +65,19 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
     }
   };
 
+  // Dynamically align slider knob with active section button text center
+  useEffect(() => {
+    const updateSlider = () => {
+      const activeEl = navItemRefs.current[activeSection];
+      if (activeEl) {
+        setSliderTop(activeEl.offsetTop + activeEl.offsetHeight / 2 - 9);
+      }
+    };
+    updateSlider();
+    window.addEventListener('resize', updateSlider);
+    return () => window.removeEventListener('resize', updateSlider);
+  }, [activeSection]);
+
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -70,7 +86,7 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
     }
   }, []);
 
-  // Scroll spy to highlight active sticky column navigation section
+  // Scroll spy to highlight active sticky column navigation section & detect background theme
   useEffect(() => {
     const handleScroll = () => {
       const sectionIds = [
@@ -105,25 +121,37 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
           }
         }
       }
+
+      // Check if current sidebar position overlaps a light background section container
+      const sidebarY = window.scrollY + 250;
+      let light = false;
+
+      const walkthroughEl = document.getElementById('section-walkthrough');
+      const reflectionEl = document.getElementById('section-reflection');
+
+      if (walkthroughEl) {
+        const top = walkthroughEl.offsetTop;
+        const bottom = top + walkthroughEl.offsetHeight;
+        if (sidebarY >= top && sidebarY <= bottom) {
+          light = true;
+        }
+      }
+
+      if (reflectionEl) {
+        const top = reflectionEl.offsetTop;
+        // From reflection top all the way down to the bottom of the page (footer)
+        if (sidebarY >= top) {
+          light = true;
+        }
+      }
+
+      setIsLightSection(light);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const isLightSection = ['walkthrough', 'reflection'].includes(activeSection);
-
-  const getSliderOffset = () => {
-    switch (activeSection) {
-      case 'overview': return 4;
-      case 'research': return 58;
-      case 'journey': return 94;
-      case 'userflow': return 130;
-      case 'walkthrough': return 166;
-      case 'reflection': return 202;
-      default: return 4;
-    }
-  };
 
   return (
     <div className="min-h-screen bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
@@ -142,18 +170,19 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
         <div className="relative py-1.5 flex flex-col space-y-2">
           {/* 0.5px SLIDER KNOB EXACTLY ALIGNED WITH TEXT ON THE LEFT STROKE */}
           <div
-            className={`absolute -left-[16px] sm:-left-[20px] w-[1px] rounded-full transition-all duration-300 ${isLightSection
+            className={`absolute top-0 -left-[16px] sm:-left-[20px] w-[1px] rounded-full transition-all duration-300 ${isLightSection
               ? 'bg-coral shadow-[0_0_6px_rgba(255,107,74,0.8)]'
               : 'bg-mint shadow-[0_0_6px_rgba(173,239,209,0.9)]'
               }`}
             style={{
               height: '18px',
-              transform: `translateY(${getSliderOffset()}px)`,
+              transform: `translateY(${sliderTop}px)`,
             }}
           />
 
           {/* OVERVIEW ITEM */}
           <button
+            ref={(el) => { navItemRefs.current['overview'] = el; }}
             onClick={() => scrollToSection('overview')}
             className={`h-7 flex items-center text-left font-sans text-sm sm:text-base transition-colors duration-200 cursor-pointer ${activeSection === 'overview'
               ? isLightSection
@@ -185,6 +214,7 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
           ].map((sec) => (
             <button
               key={sec.id}
+              ref={(el) => { navItemRefs.current[sec.id] = el; }}
               onClick={() => scrollToSection(sec.id)}
               className={`h-7 flex items-center text-left font-sans text-sm sm:text-base transition-colors duration-200 cursor-pointer ${activeSection === sec.id
                 ? isLightSection
@@ -201,11 +231,11 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* PAGE CONTAINER WITH TOP PADDING FOR FIXED NAVBAR — SHIFTED SLIGHTLY LEFT ON DESKTOP */}
-      <div className="pt-36 md:pt-48 pb-0 xl:-translate-x-10 transition-transform">
+      {/* PAGE CONTAINER WITH TOP PADDING FOR FIXED NAVBAR */}
+      <div className="pt-36 md:pt-48 pb-0">
 
         {/* NAVY CONTAINER PART 1 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 space-y-24 md:space-y-28 pb-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 space-y-24 md:space-y-28 pb-16">
 
           {/* 1. HERO SECTION */}
           <div id="section-overview" className="space-y-8">
@@ -809,16 +839,16 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* USER INTERFACE SECTION — MATCHED BACKGROUND WITH SEAMLESS IMAGE BLEND */}
-        <div id="section-walkthrough" className="bg-white text-navy py-12 sm:py-16 md:py-24 my-12 overflow-hidden">
+        <div id="section-walkthrough" className="bg-white text-navy py-12 sm:py-16 md:py-24 my-12 overflow-hidden w-full">
           {/* HEADING CONTAINER ALIGNED WITH THE REST OF THE SITE */}
-          <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32">
             <h2 className="font-headline font-bold text-[30px] text-navy text-left">
               User Interface
             </h2>
           </div>
 
           {/* EXPANDED CONTENT CONTAINER FOR MAXIMUM IMAGE READABILITY & EQUAL DIMENSION ALIGNMENT */}
-          <div className="max-w-[1320px] mx-auto px-4 sm:px-6 md:px-8 mt-6 sm:mt-8">
+          <div className="max-w-[1320px] mx-auto px-4 sm:px-6 md:px-8 xl:pr-32 mt-6 sm:mt-8">
             <div className="w-full flex flex-col items-center gap-0">
               
               {/* 1. ONBOARDING */}
@@ -886,7 +916,7 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* NAVY CONTAINER PART 2 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 pb-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 pb-16">
           {/* 7. PROTOTYPE SECTION */}
           <div id="section-prototype" className="pt-16 pb-12 space-y-10">
             <h2 className="font-headline font-bold text-[30px] text-mint text-left">
@@ -950,8 +980,8 @@ export const BeaconPage: React.FC<BeaconPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* REFLECTION & NEXT PROJECT BUTTON SECTIONS (OFF-WHITE BACKGROUND WITH NAVY HEADING) */}
-        <div id="section-reflection" className="bg-offwhite text-navy py-24">
-          <div className="max-w-6xl mx-auto px-6 md:px-12 space-y-20">
+        <div id="section-reflection" className="bg-offwhite text-navy py-24 w-full">
+          <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 space-y-20">
 
             {/* REFLECTION SECTION */}
             <div className="space-y-8">

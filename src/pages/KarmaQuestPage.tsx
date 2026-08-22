@@ -10,6 +10,9 @@ interface KarmaQuestPageProps {
 export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('overview');
+  const [isLightSection, setIsLightSection] = useState<boolean>(false);
+  const [sliderTop, setSliderTop] = useState<number>(5);
+  const navItemRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
@@ -33,6 +36,19 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
     }
   };
 
+  // Dynamically align slider knob with active section button text center
+  useEffect(() => {
+    const updateSlider = () => {
+      const activeEl = navItemRefs.current[activeSection];
+      if (activeEl) {
+        setSliderTop(activeEl.offsetTop + activeEl.offsetHeight / 2 - 9);
+      }
+    };
+    updateSlider();
+    window.addEventListener('resize', updateSlider);
+    return () => window.removeEventListener('resize', updateSlider);
+  }, [activeSection]);
+
   // Scroll to top and reset video recording to start on mount
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,7 +57,7 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
     }
   }, []);
 
-  // Scroll spy to highlight active sticky column navigation section
+  // Scroll spy to highlight active sticky column navigation section & detect background theme
   useEffect(() => {
     const handleScroll = () => {
       const sectionIds = ['overview', 'research', 'solution', 'ideate', 'prototype', 'reflection'];
@@ -58,25 +74,46 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
           }
         }
       }
+
+      // Check if the current sidebar position overlaps a light background section container
+      const sidebarY = window.scrollY + 250;
+      let light = false;
+      
+      const solutionEl = document.getElementById('section-solution');
+      const prototypeEl = document.getElementById('section-prototype');
+      const reflectionEl = document.getElementById('section-reflection');
+
+      if (solutionEl) {
+        const top = solutionEl.offsetTop;
+        const bottom = top + solutionEl.offsetHeight;
+        if (sidebarY >= top && sidebarY <= bottom) {
+          light = true;
+        }
+      }
+
+      if (prototypeEl) {
+        const top = prototypeEl.offsetTop;
+        const bottom = top + prototypeEl.offsetHeight;
+        if (sidebarY >= top && sidebarY <= bottom) {
+          light = true;
+        }
+      }
+
+      if (reflectionEl) {
+        const top = reflectionEl.offsetTop;
+        // From reflection top all the way down to the bottom of the page (footer)
+        if (sidebarY >= top) {
+          light = true;
+        }
+      }
+
+      setIsLightSection(light);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const isLightSection = ['solution', 'prototype', 'reflection'].includes(activeSection);
-
-  const getSliderOffset = () => {
-    switch (activeSection) {
-      case 'overview': return 4;
-      case 'research': return 58;
-      case 'solution': return 94;
-      case 'ideate': return 130;
-      case 'prototype': return 166;
-      case 'reflection': return 202;
-      default: return 4;
-    }
-  };
 
   return (
     <div className="min-h-screen bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
@@ -95,19 +132,20 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
           
           {/* 0.5px SLIDER KNOB EXACTLY ALIGNED WITH TEXT ON THE LEFT STROKE */}
           <div
-            className={`absolute -left-[16px] sm:-left-[20px] w-[1px] rounded-full transition-all duration-300 ${
+            className={`absolute top-0 -left-[16px] sm:-left-[20px] w-[1px] rounded-full transition-all duration-300 ${
               isLightSection
                 ? 'bg-coral shadow-[0_0_6px_rgba(255,107,74,0.8)]'
                 : 'bg-mint shadow-[0_0_6px_rgba(173,239,209,0.9)]'
             }`}
             style={{
               height: '18px',
-              transform: `translateY(${getSliderOffset()}px)`,
+              transform: `translateY(${sliderTop}px)`,
             }}
           />
 
           {/* OVERVIEW ITEM (MULISH FONT 14-16PX ALIGNED WITH SLIDER) */}
           <button
+            ref={(el) => { navItemRefs.current['overview'] = el; }}
             onClick={() => scrollToSection('overview')}
             className={`h-7 flex items-center text-left font-sans text-sm sm:text-base transition-colors duration-200 cursor-pointer ${
               activeSection === 'overview'
@@ -141,6 +179,7 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
           ].map((sec) => (
             <button
               key={sec.id}
+              ref={(el) => { navItemRefs.current[sec.id] = el; }}
               onClick={() => scrollToSection(sec.id)}
               className={`h-7 flex items-center text-left font-sans text-sm sm:text-base transition-colors duration-200 cursor-pointer ${
                 activeSection === sec.id
@@ -159,11 +198,11 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
         </div>
       </div>
 
-      {/* PAGE CONTAINER WITH TOP PADDING FOR FIXED NAVBAR — SHIFTED SLIGHTLY LEFT ON DESKTOP */}
-      <div className="pt-36 md:pt-48 pb-0 xl:-translate-x-10 transition-transform">
+      {/* PAGE CONTAINER WITH TOP PADDING FOR FIXED NAVBAR */}
+      <div className="pt-36 md:pt-48 pb-0">
 
         {/* NAVY CONTAINER PART 1 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 space-y-24 md:space-y-28 pb-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 space-y-24 md:space-y-28 pb-16">
 
           {/* 1. HERO SECTION */}
           <div id="section-overview" className="space-y-8">
@@ -346,8 +385,8 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
         </div>
 
         {/* OBSERVATIONS & SOLUTIONS — COMPLETE SCREEN WIDTH OFF-WHITE BACKGROUND */}
-        <div id="section-solution" className="bg-offwhite text-navy py-20">
-          <div className="max-w-6xl mx-auto px-6 md:px-12 space-y-8">
+        <div id="section-solution" className="bg-offwhite text-navy py-20 w-full">
+          <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 space-y-8">
             <h2 className="font-headline font-bold text-[30px] text-navy text-left">
               Observations & Solutions
             </h2>
@@ -393,7 +432,7 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
         </div>
 
         {/* NAVY CONTAINER PART 2 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 space-y-24 md:space-y-28 pb-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 space-y-24 md:space-y-28 pb-16">
 
           {/* 4. DEFINING THE EXPERIENCE */}
           <div className="pt-10 space-y-8">
@@ -714,16 +753,16 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
         </div>
 
         {/* USER INTERFACE SECTION — MATCHED BACKGROUND WITH SEAMLESS IMAGE BLEND */}
-        <div id="section-prototype" className="bg-white text-navy py-12 sm:py-16 md:py-24 my-12 overflow-hidden">
+        <div id="section-prototype" className="bg-white text-navy py-12 sm:py-16 md:py-24 my-12 overflow-hidden w-full">
           {/* HEADING CONTAINER ALIGNED WITH THE REST OF THE SITE */}
-          <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32">
             <h2 className="font-headline font-bold text-[30px] text-navy text-left">
               User Interface
             </h2>
           </div>
 
           {/* EXPANDED CONTENT CONTAINER FOR MAXIMUM IMAGE READABILITY & EQUAL DIMENSION ALIGNMENT */}
-          <div className="max-w-[1320px] mx-auto px-4 sm:px-6 md:px-8 mt-6 sm:mt-8">
+          <div className="max-w-[1320px] mx-auto px-4 sm:px-6 md:px-8 xl:pr-32 mt-6 sm:mt-8">
             <div className="w-full flex flex-col items-center gap-0">
               
               {/* 1. ONBOARDING */}
@@ -791,7 +830,7 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
         </div>
 
         {/* NAVY CONTAINER PART 3 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 pb-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 pb-16">
           {/* 10. PROTOTYPE SECTION */}
           <div className="pt-16 pb-12 space-y-10">
             <h2 className="font-headline font-bold text-[30px] text-mint text-left">
@@ -859,11 +898,11 @@ export const KarmaQuestPage: React.FC<KarmaQuestPageProps> = ({ onNavigate }) =>
           11. REFLECTION & NEXT PROJECT BUTTON SECTIONS (OFF-WHITE BACKGROUND WITH NAVY HEADING)
           NO HORIZONTAL DIVIDER LINE BETWEEN REFLECTION AND NEXT PROJECT BUTTON
         */}
-        <div className="bg-offwhite text-navy py-24">
-          <div className="max-w-6xl mx-auto px-6 md:px-12 space-y-20">
+        <div id="section-reflection" className="bg-offwhite text-navy py-24 w-full">
+          <div className="max-w-6xl mx-auto px-6 md:px-12 xl:pr-32 space-y-20">
             
             {/* REFLECTION SECTION */}
-            <div id="section-reflection" className="space-y-8">
+            <div className="space-y-8">
               <h2 className="font-headline font-bold text-[30px] text-navy text-left">
                 Reflection
               </h2>
