@@ -266,10 +266,11 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                 let pointerEvents: 'auto' | 'none' = 'auto';
 
                 if (idx > 0) {
-                  const slideStart = (idx - 1) / totalTransitions;
+                  const baseStart = (idx - 1) / totalTransitions;
                   const slideEnd = idx / totalTransitions;
+                  const activeSlideStart = baseStart + 0.04; // 4% scroll delay buffer so card is hidden on initial view
 
-                  if (scrollProgress < slideStart) {
+                  if (scrollProgress < activeSlideStart) {
                     translateY = 100;
                     opacity = 0;
                     pointerEvents = 'none';
@@ -278,7 +279,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                     opacity = 1;
                     pointerEvents = 'auto';
                   } else {
-                    const ratio = (scrollProgress - slideStart) / (slideEnd - slideStart);
+                    const ratio = (scrollProgress - activeSlideStart) / (slideEnd - activeSlideStart);
                     translateY = (1 - ratio) * 100;
                     opacity = Math.min(1, ratio / 0.15); // smooth 15% initial fade-in
                     pointerEvents = 'auto';
@@ -287,10 +288,6 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
 
                 const isActiveTab = activeStep === idx;
                 const tabLeftOffset = idx * 165; // side-by-side accumulation
-
-                // Tab appears only as the card completes its slide into position at top
-                const slideEnd = idx > 0 ? idx / totalTransitions : 0;
-                const isTabVisible = idx === 0 || scrollProgress >= slideEnd - 0.08;
 
                 return (
                   <div
@@ -318,13 +315,8 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                         e.stopPropagation();
                         handleTabClick(idx);
                       }}
-                      style={{
-                        left: `${tabLeftOffset}px`,
-                        opacity: isTabVisible ? 1 : 0,
-                        pointerEvents: isTabVisible ? 'auto' : 'none',
-                        transition: 'opacity 200ms ease-out',
-                      }}
-                      className={`absolute -top-10 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs flex items-center justify-center truncate border-t border-l border-r ${
+                      style={{ left: `${tabLeftOffset}px` }}
+                      className={`absolute -top-10 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs flex items-center justify-center truncate border-t border-l border-r transition-all duration-300 ${
                         isActiveTab
                           ? 'bg-white border-navy/10 text-navy z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
                           : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
