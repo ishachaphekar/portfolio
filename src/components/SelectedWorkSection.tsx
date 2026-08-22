@@ -232,7 +232,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
     <section
       id="work"
       ref={sectionRef}
-      className={`relative bg-offwhite text-navy m-0 ${
+      className={`relative bg-offwhite text-navy m-0 overflow-hidden ${
         isMobile ? 'pt-28 pb-36 px-6' : 'h-[340vh] pt-16 pb-32 px-6 md:px-12'
       }`}
     >

@@ -191,10 +191,10 @@ export const HeroSection: React.FC = () => {
 
       <div className="max-w-6xl mx-auto w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           {/* LEFT COLUMN: MAIN HERO CONTENT (Repositioned slightly up & toward center, smart negative space) */}
           <div className="lg:col-span-7 z-10 pointer-events-auto -mt-4">
-            
+
             {/* OPPORTUNITY PILL */}
             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-mint/10 border border-mint/20 text-mint text-xs md:text-sm font-sans font-medium mb-9 transition-all hover:bg-mint/15">
               <span className="relative flex h-2.5 w-2.5">
@@ -207,7 +207,7 @@ export const HeroSection: React.FC = () => {
             {/* INTRO BLOCK: +20% PROFILE PHOTO FIRST + "hi, I'm Isha" + #5F6B83 SUB-TEXT */}
             <div className="mb-9 space-y-2">
               <div className="flex items-center gap-6">
-                
+
                 {/* 1. ROUNDED VERTICAL RECTANGLE PROFILE PHOTO */}
                 <div
                   className="w-24 h-28 sm:w-28 sm:h-34 rounded-2xl bg-navy-light border-2 border-mint/30 shadow-xl overflow-hidden flex-shrink-0 transform rotate-[6deg] hover:rotate-0 transition-transform duration-300"
@@ -225,7 +225,7 @@ export const HeroSection: React.FC = () => {
                   <span className="font-script text-coral text-3xl md:text-4xl font-bold tracking-wide">
                     {HERO_DATA.personalIntro}
                   </span>
-                  
+
                   {/* Single Line Text in #5F6B83 */}
                   <p className="text-xs sm:text-sm md:text-base font-sans font-medium text-[#5F6B83] tracking-wide">
                     UI/UX Designer | Research-First Design | Exploring UX + AI
@@ -274,9 +274,8 @@ export const HeroSection: React.FC = () => {
                 transform: `rotate(${totalRotation}deg) scale(${isDragging ? 1.08 : 1})`,
                 touchAction: 'none',
               }}
-              className={`absolute w-[290px] sm:w-[320px] p-5 rounded-2xl border shadow-xl cursor-grab active:cursor-grabbing select-none transition-transform transition-shadow duration-200 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl ${note.bgColor} ${note.textColor} ${note.borderColor} ${
-                isDragging ? 'shadow-2xl ring-2 ring-coral/60 scale-108' : ''
-              }`}
+              className={`hidden md:block absolute w-[290px] sm:w-[320px] p-5 rounded-2xl border shadow-xl cursor-grab active:cursor-grabbing select-none transition-transform transition-shadow duration-200 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl ${note.bgColor} ${note.textColor} ${note.borderColor} ${isDragging ? 'shadow-2xl ring-2 ring-coral/60 scale-108' : ''
+                }`}
             >
               {/* TACTILE DETAILS */}
               {note.pinType === 'pin' && (
@@ -302,7 +301,7 @@ export const HeroSection: React.FC = () => {
         })}
 
       {/* HANDWRITTEN INSTRUCTION PLACED TO THE RIGHT OF THE 2ND STICKY NOTE */}
-      {isInitialized && note2 && (
+      {/* {isInitialized && note2 && (
         <div
           style={{
             left: `${note2X}px`,
@@ -313,7 +312,7 @@ export const HeroSection: React.FC = () => {
           <ArrowLeft className="w-4 h-4 text-mint/80 stroke-[2.5]" />
           <span>you can move these around</span>
         </div>
-      )}
+      )} */}
     </section>
   );
 };

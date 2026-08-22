@@ -97,7 +97,7 @@ export const AboutSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="about" className="relative py-24 px-6 md:px-12 bg-navy text-offwhite min-h-screen">
+    <section id="about" className="relative py-24 px-6 md:px-12 bg-navy text-offwhite min-h-screen overflow-hidden">
       <div className="max-w-6xl mx-auto space-y-24">
         
         {/* SECTION TITLE */}

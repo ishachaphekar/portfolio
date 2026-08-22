@@ -115,8 +115,8 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
 
   return (
     <>
-      <header className="fixed top-[18px] left-4 md:left-[50px] right-4 md:right-[50px] z-50 transition-all duration-300 pointer-events-none">
-        <div className="max-w-6xl mx-auto bg-[#0d2b49] border border-[#13304E] rounded-[10px] shadow-[0px_8px_34px_rgba(0,0,0,0.34)] px-5 md:px-7 py-3 flex items-center justify-between pointer-events-auto backdrop-blur-md">
+      <header className="fixed top-0 left-0 right-0 md:top-[18px] md:left-[50px] md:right-[50px] z-50 w-full md:w-auto transition-all duration-300 pointer-events-none">
+        <div className="w-full max-w-full md:max-w-6xl mx-auto bg-[#0d2b49] border-b border-[#13304E] md:border md:rounded-[10px] shadow-[0px_8px_34px_rgba(0,0,0,0.34)] px-4 sm:px-6 md:px-7 py-3 flex items-center justify-between pointer-events-auto backdrop-blur-md box-border">
 
           {/* LEFT ZONE: Logo mark */}
           <div className="flex items-center">
@@ -144,8 +144,8 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.id, item.isRoute, item.href)}
                   className={`text-xs md:text-sm font-sans relative py-1 transition-colors cursor-pointer ${isActive
-                      ? 'text-mint font-semibold'
-                      : 'font-medium text-offwhite/80 hover:text-mint after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-mint hover:after:w-full after:transition-all'
+                    ? 'text-mint font-semibold'
+                    : 'font-medium text-offwhite/80 hover:text-mint after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-mint hover:after:w-full after:transition-all'
                     }`}
                 >
                   {item.label}
@@ -195,7 +195,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
 
       {/* FULL-SCREEN OVERLAY MENU (Mobile / Tablet portrait) */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] bg-[#00203F]/98 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-8 md:hidden pointer-events-auto">
+        <div className="fixed inset-0 z-[100] w-full max-w-full overflow-hidden bg-[#00203F] flex flex-col justify-between p-6 sm:p-8 md:hidden pointer-events-auto box-border">
           {/* OVERLAY HEADER */}
           <div className="flex items-center justify-between border-b border-[#13304E]/80 pb-5">
             <a
@@ -232,7 +232,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                   key={item.id}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.id, item.isRoute, item.href)}
-                  className={`text-2xl font-headline font-bold tracking-wide transition-colors ${isActive ? 'text-mint' : 'text-offwhite/90 hover:text-mint'
+                  className={`text-2xl font-headline font-bold tracking-wide transition-colors text-mint hover:text-offwhite ${isActive ? 'underline underline-offset-8 decoration-mint' : ''
                     }`}
                 >
                   {item.label}
