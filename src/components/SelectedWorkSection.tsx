@@ -22,7 +22,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'I worked as the sole UX/UI Designer, Researcher, and Game Designer for the project.',
     timeline: '21 weeks',
     outcome: 'The project resulted in a functional narrative mobile game prototype, along with its brand identity and supporting research documentation.',
-    imageSrc: '/karmaquest-preview.jpg',
+    imageSrc: '/karmaquest-preview.webp',
     route: '/projects/karmaquest',
   },
   {
@@ -32,7 +32,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'I worked as the Lead UX/UI Designer & Researcher for the product.',
     timeline: '4 weeks',
     outcome: 'The project resulted in a full end-to-end interactive Figma prototype.',
-    imageSrc: '/beacon-preview.png',
+    imageSrc: '/beacon-preview.webp',
     route: '/projects/beacon',
   },
   {
@@ -42,7 +42,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Solo UX/UI designer and researcher',
     timeline: '2 weeks',
     outcome: 'An end-to-end healthcare platform prototype, spanning telemedicine and pharmacy fulfillment, along with its brand identity and supporting research.',
-    imageSrc: '/assets/Project container mockup image.png',
+    imageSrc: '/assets/Project container mockup image.webp',
     route: '/projects/nirogya',
     imageClassName: 'scale-[1.47] -translate-y-6 md:-translate-y-8',
     isUpcoming: true,
@@ -116,9 +116,8 @@ const ProjectCard: React.FC<{ project: ProjectItem; onClick?: () => void }> = ({
       <img
         src={project.imageSrc}
         alt={project.title}
-        className={`w-full h-full object-cover object-center rounded-2xl shadow-sm transition-transform duration-500 ${
-          project.imageClassName || 'group-hover:scale-102'
-        }`}
+        className={`w-full h-full object-cover object-center rounded-2xl shadow-sm transition-transform duration-500 ${project.imageClassName || 'group-hover:scale-102'
+          }`}
       />
     </div>
   </div>
@@ -146,7 +145,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
   // Scroll-linked progress (desktop only)
   useEffect(() => {
     if (isMobile) return;
-    
+
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
@@ -157,7 +156,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
       const offset = STICKY_TOP - rect.top;
       const progress = Math.max(0, Math.min(1, offset / totalScrollable));
       setScrollProgress(progress);
-      
+
       const totalTransitions = Math.max(1, PROJECTS.length - 1);
       const step = Math.min(
         PROJECTS.length - 1,
@@ -205,9 +204,8 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
       id="work"
       ref={sectionRef}
       style={{ height: dynamicSectionHeight }}
-      className={`relative bg-offwhite text-navy m-0 overflow-x-clip ${
-        isMobile ? 'py-8 px-6' : 'py-8 px-6 md:px-12'
-      }`}
+      className={`relative bg-offwhite text-navy m-0 overflow-x-clip ${isMobile ? 'py-8 px-6' : 'py-8 px-6 md:px-12'
+        }`}
     >
       {/* STICKY INNER WRAPPER */}
       <div
@@ -243,11 +241,10 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                   {/* Mobile Folder Tab */}
                   <button
                     onClick={() => handleTabClick(idx)}
-                    className={`absolute top-0 left-0 h-10 w-[160px] px-4 rounded-t-xl border-t border-l border-r font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate ${
-                      activeStep === idx
+                    className={`absolute top-0 left-0 h-10 w-[160px] px-4 rounded-t-xl border-t border-l border-r font-headline font-bold text-xs transition-all duration-300 flex items-center justify-center truncate ${activeStep === idx
                         ? 'bg-white border-navy/15 text-navy shadow-md'
                         : 'bg-navy/10 border-navy/10 text-navy/60 hover:text-navy'
-                    }`}
+                      }`}
                   >
                     {project.title}
                   </button>
@@ -301,12 +298,12 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                       idx === 0
                         ? undefined
                         : {
-                            zIndex: 10 + idx * 10,
-                            transform: `translateY(${translateY}%)`,
-                            opacity: opacity,
-                            pointerEvents: pointerEvents,
-                            willChange: 'transform, opacity',
-                          }
+                          zIndex: 10 + idx * 10,
+                          transform: `translateY(${translateY}%)`,
+                          opacity: opacity,
+                          pointerEvents: pointerEvents,
+                          willChange: 'transform, opacity',
+                        }
                     }
                   >
                     {/* Folder Tab */}
@@ -316,11 +313,10 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onNavi
                         handleTabClick(idx);
                       }}
                       style={{ left: `${tabLeftOffset}px` }}
-                      className={`absolute -top-10 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs flex items-center justify-center truncate border-t border-l border-r transition-all duration-300 ${
-                        isActiveTab
+                      className={`absolute -top-10 h-10 w-[160px] px-4 rounded-t-2xl font-headline font-bold text-xs flex items-center justify-center truncate border-t border-l border-r transition-all duration-300 ${isActiveTab
                           ? 'bg-white border-navy/10 text-navy z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] border-b-white translate-y-[1px]'
                           : 'bg-navy/10 border-navy/15 text-navy/60 hover:text-navy z-10 backdrop-blur-xs'
-                      }`}
+                        }`}
                     >
                       {project.title}
                     </button>

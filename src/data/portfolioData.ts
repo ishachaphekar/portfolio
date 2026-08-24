@@ -118,15 +118,15 @@ export const ABOUT_DATA = {
       answer: "Good design lives in the smallest details — the right font on a brochure, a satisfying animation, the feeling of enjoying a website or app."
     },
     {
-      question: "What frustrates you?",
+      question: "What frustrates me?",
       answer: "Seeing bad design, and knowing it didn't have to be that way."
     },
     {
-      question: "What excites you?",
+      question: "What excites me?",
       answer: "Brainstorming and ideating — sitting with a problem until it starts coming together, like a 1000-piece puzzle."
     },
     {
-      question: "What do you enjoy making?",
+      question: "What do I enjoy making?",
       answer: "Platforms that solve real, current problems — increasingly, anything at the intersection of UX and AI."
     }
   ] as PhilosophyData[],
@@ -192,7 +192,7 @@ export const ABOUT_DATA = {
       subtitle: "Original Creative Work: \"KarmaQuest\"",
       detail: "Official copyright registration (SW-2025021571) for game concepts and visual design assets by Government of India.",
       badge: "Copyright 2025",
-      imageSrc: "/cert-3.png"
+      imageSrc: "/cert-3.webp"
     }
   ] as ResearchCardData[],
 
