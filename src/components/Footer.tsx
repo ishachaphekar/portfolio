@@ -1,12 +1,27 @@
-import React from 'react';
-import { ArrowUpRight, Heart } from 'lucide-react';
+import React, { useState } from 'react';
+import { Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) return;
+
+    const mailtoUrl = `mailto:ishachaphekarwork@gmail.com?subject=Reaching%20out%20from%20Portfolio&body=Hi%20Isha,%0A%0AMy%20email%20is:%20${encodeURIComponent(
+      email
+    )}`;
+    window.open(mailtoUrl, '_blank');
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 4000);
+  };
+
   return (
     <footer className="py-16 px-6 md:px-12 bg-navy text-offwhite border-t border-mint/10">
       <div className="max-w-6xl mx-auto space-y-16">
         
-        {/* TOP SECTION: "Always up for a good conversation!" + Subtitle + "Reach out at ↗" Button */}
+        {/* TOP SECTION: "Always up for a good conversation!" + Subtitle + Email Input & "Reach out" Button */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <h3 className="font-headline text-3xl md:text-4xl text-[#F4F4F4] font-bold tracking-tight mb-2">
@@ -17,13 +32,34 @@ export const Footer: React.FC = () => {
             </p>
           </div>
 
-          <a
-            href="mailto:ishachaphekarwork@gmail.com"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-coral text-navy font-headline font-bold text-sm hover:bg-coral-hover transition-colors shadow-lg group cursor-pointer"
+          {/* EMAIL INPUT BOX & REACH OUT BUTTON */}
+          <form
+            onSubmit={handleSubmit}
+            className="flex items-center gap-3 w-full sm:w-auto"
           >
-            <span>Reach out at</span>
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform stroke-[2.5]" />
-          </a>
+            <div className="relative flex items-center w-full sm:w-[250px] md:w-[270px]">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your.email@gmail.com"
+                required
+                className="w-full h-11 pl-4 pr-10 rounded-xl bg-navy-light/90 border border-mint/20 text-offwhite text-sm font-sans placeholder:text-offwhite/40 focus:outline-none focus:border-mint transition-colors shadow-inner"
+              />
+              <img
+                src="/email icon.png"
+                alt="Email Icon"
+                className="absolute right-3 w-6 h-6 object-contain pointer-events-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="h-11 px-5 rounded-xl bg-coral text-navy font-headline font-bold text-sm hover:bg-coral-hover transition-all duration-200 shadow-lg hover:shadow-coral/20 cursor-pointer flex items-center justify-center shrink-0"
+            >
+              {submitted ? 'Sent!' : 'Reach out'}
+            </button>
+          </form>
         </div>
 
         {/* THIN HORIZONTAL DIVIDER (MOVED FURTHER DOWN) */}
