@@ -247,8 +247,12 @@ export const HeroSection: React.FC = () => {
 
           </div>
 
-          {/* RIGHT COLUMN SPACER FOR GRID */}
-          <div className="lg:col-span-5 h-[340px] hidden lg:block pointer-events-none" />
+          {/* RIGHT COLUMN WITH INSTRUCTION TEXT */}
+          <div className="lg:col-span-5 h-[340px] hidden lg:flex flex-col justify-end items-end pointer-events-none relative pr-4 pb-2">
+            <span className="font-sans text-[12px] text-offwhite/80 tracking-wide select-none whitespace-nowrap transform translate-y-7">
+              try moving these :)
+            </span>
+          </div>
 
         </div>
       </div>
