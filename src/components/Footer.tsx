@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -30,9 +30,15 @@ export const Footer: React.FC = () => {
         <div className="w-full border-t border-mint/15 pt-2" />
 
         {/* BOTTOM SECTION: Copyright + Image Icon Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans text-offwhite/50">
-          <div>
-            © 2026 Isha Chaphekar. Designed with Antigravity, Spotify and lots of overthinking!!
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 font-sans text-offwhite">
+          <div className="space-y-1">
+            <p className="text-[16px] text-offwhite flex items-center gap-1.5 flex-wrap">
+              <span>Built with Antigravity, Spotify and lots of overthinking!!</span>
+              <Heart className="w-4 h-4 text-coral fill-coral inline-block shrink-0" />
+            </p>
+            <p className="text-[14px] text-offwhite/80">
+              © 2026 Isha Chaphekar.
+            </p>
           </div>
 
           {/* LinkedIn & Behance Rounded Rectangle Icon Buttons */}
