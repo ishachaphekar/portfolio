@@ -51,7 +51,7 @@ A premium, interactive personal portfolio website for **Isha Chaphekar** — UI/
 | **Core Framework** | React 18, TypeScript, Vite |
 | **Styling & Utilities** | Tailwind CSS v3, Vanilla CSS, `clsx`, `tailwind-merge` |
 | **Icons & Media** | Lucide React Icons |
-| **Fonts & Typography** | Space Grotesk (Headlines), Mulish (Body), Dancing Script (Script accents) |
+| **Fonts & Typography** | Space Grotesk (Headlines), Mulish (Body), Kalam (Script accents) |
 | **Deployment** | Vercel |
 
 ---

@@ -29,7 +29,7 @@ export const HeroSection: React.FC = () => {
       id: 'note-1',
       text: 'picks the hardest, messiest problem in the room — on purpose',
       bgColor: 'bg-mint',
-      textColor: 'text-navy font-bold',
+      textColor: 'text-navy font-normal',
       borderColor: 'border-navy/10',
       x: 0,
       y: 0,
@@ -43,7 +43,7 @@ export const HeroSection: React.FC = () => {
       id: 'note-2',
       text: "reads every screen like there's a design decision hiding in it",
       bgColor: 'bg-offwhite',
-      textColor: 'text-navy font-bold',
+      textColor: 'text-navy font-normal',
       borderColor: 'border-navy/15',
       x: 0,
       y: 0,
@@ -57,7 +57,7 @@ export const HeroSection: React.FC = () => {
       id: 'note-3',
       text: 'my process: research → question → make → refine',
       bgColor: 'bg-navy-light',
-      textColor: 'text-mint font-bold',
+      textColor: 'text-mint font-normal',
       borderColor: 'border-mint/20',
       x: 0,
       y: 0,
@@ -222,7 +222,7 @@ export const HeroSection: React.FC = () => {
 
                 {/* 2. "hi, I'm Isha" TEXT & #5F6B83 SINGLE LINE SUB-TEXT */}
                 <div className="flex flex-col justify-center gap-2">
-                  <span className="font-script text-coral text-3xl md:text-4xl font-bold tracking-wide">
+                  <span className="font-script text-coral text-3xl md:text-4xl font-normal tracking-wide">
                     {HERO_DATA.personalIntro}
                   </span>
 
@@ -297,7 +297,7 @@ export const HeroSection: React.FC = () => {
               )}
 
               {/* NOTE TEXT */}
-              <p className="font-script text-lg md:text-xl tracking-wide leading-snug pt-1 pointer-events-none">
+              <p className="font-script text-[17px] md:text-[19px] tracking-normal leading-snug pt-1 pointer-events-none">
                 {note.text}
               </p>
             </div>

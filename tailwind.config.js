@@ -31,7 +31,7 @@ export default {
       fontFamily: {
         sans: ['Mulish', 'sans-serif'],
         headline: ['"Space Grotesk"', 'sans-serif'],
-        script: ['"Dancing Script"', 'cursive'],
+        script: ['Kalam', 'cursive'],
       },
       borderRadius: {
         '2xl': '1rem',

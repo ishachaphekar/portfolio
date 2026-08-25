@@ -129,7 +129,7 @@ export const AboutSection: React.FC = () => {
               <div className="absolute -top-16 sm:-top-20 -right-10 sm:-right-32 z-30 w-[180px] sm:w-[205px] p-3.5 rounded-xl border border-navy/15 bg-[#F4F4F4] text-navy shadow-xl -rotate-[8deg] select-none">
                 <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-10 h-3.5 bg-offwhite/50 border-t border-b border-white/60 backdrop-blur-xs rounded-xs rotate-[-2deg] shadow-xs pointer-events-none" />
                 
-                <p className="font-script text-xs sm:text-sm font-bold tracking-wide leading-snug pt-1">
+                <p className="font-script text-xs sm:text-sm font-normal tracking-wide leading-snug pt-1">
                   Off-screen, I enjoy travelling, baking, exploring new hobbies or five episodes deep into a sitcom I've already seen once.
                 </p>
               </div>
