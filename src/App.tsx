@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import { KarmaQuestPage } from './pages/KarmaQuestPage';
 import { BeaconPage } from './pages/BeaconPage';
 import { ArchivesPage } from './pages/ArchivesPage';
+import { LiquidCursor } from './components/LiquidCursor';
 
 export const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
@@ -43,6 +44,7 @@ export const App: React.FC = () => {
   if (currentPath === '/projects/karmaquest') {
     return (
       <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+        <LiquidCursor />
         <KarmaQuestPage onNavigate={navigateTo} />
         <Footer />
       </div>
@@ -52,6 +54,7 @@ export const App: React.FC = () => {
   if (currentPath === '/projects/beacon') {
     return (
       <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+        <LiquidCursor />
         <BeaconPage onNavigate={navigateTo} />
         <Footer />
       </div>
@@ -61,6 +64,7 @@ export const App: React.FC = () => {
   if (currentPath === '/archives') {
     return (
       <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+        <LiquidCursor />
         <ArchivesPage onNavigate={navigateTo} />
         <Footer />
       </div>
@@ -69,6 +73,8 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-clip bg-navy text-offwhite font-sans selection:bg-mint selection:text-navy">
+      <LiquidCursor />
+
       {/* 1. NAVIGATION */}
       <Navigation onNavigate={navigateTo} />
 
