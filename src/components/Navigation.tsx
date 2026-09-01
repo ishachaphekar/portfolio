@@ -155,7 +155,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
 
             {/* RESUME BUTTON */}
             <a
-              href="https://drive.google.com/file/d/1EKU9CL8M1yHmD2kVEIXG1PH8T5zNTIHl/view?usp=sharing"
+              href="https://drive.google.com/file/d/13m6idqr8j7YP4kXHdYHuGaX9IalfvzHa/view?usp=drive_link"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center px-4 py-1.5 rounded-[10px] bg-[#0d2b49] border border-[#FF6B4A] text-[#FF6B4A] font-sans font-bold text-xs hover:bg-[#FF6B4A] hover:text-[#00203F] transition-all duration-200 shadow-sm"
