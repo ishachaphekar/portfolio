@@ -111,6 +111,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
     { id: 'work', label: 'Work', href: '/#work' },
     { id: 'about', label: 'About', href: '/#about' },
     { id: 'archives', label: 'Archives', href: '/archives', isRoute: true },
+    { id: 'blog', label: 'Blog', href: 'https://medium.com/@ishachaphekar', isExternal: true },
   ];
 
   return (
@@ -142,7 +143,15 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                 <a
                   key={item.id}
                   href={item.href}
-                  onClick={(e) => handleNavClick(e, item.id, item.isRoute, item.href)}
+                  target={item.isExternal ? '_blank' : undefined}
+                  rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                  onClick={(e) => {
+                    if (item.isExternal) {
+                      setIsMobileMenuOpen(false);
+                    } else {
+                      handleNavClick(e, item.id, item.isRoute, item.href);
+                    }
+                  }}
                   className={`text-xs md:text-sm font-sans relative py-1 transition-colors cursor-pointer ${isActive
                     ? 'text-mint font-semibold'
                     : 'font-medium text-offwhite/80 hover:text-mint after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-mint hover:after:w-full after:transition-all'
@@ -231,7 +240,15 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                 <a
                   key={item.id}
                   href={item.href}
-                  onClick={(e) => handleNavClick(e, item.id, item.isRoute, item.href)}
+                  target={item.isExternal ? '_blank' : undefined}
+                  rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                  onClick={(e) => {
+                    if (item.isExternal) {
+                      setIsMobileMenuOpen(false);
+                    } else {
+                      handleNavClick(e, item.id, item.isRoute, item.href);
+                    }
+                  }}
                   className={`text-2xl font-headline font-bold tracking-wide transition-colors text-mint hover:text-offwhite ${isActive ? 'underline underline-offset-8 decoration-mint' : ''
                     }`}
                 >
