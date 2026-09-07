@@ -111,7 +111,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
     { id: 'work', label: 'Work', href: '/#work' },
     { id: 'about', label: 'About', href: '/#about' },
     { id: 'archives', label: 'Archives', href: '/archives', isRoute: true },
-    { id: 'blog', label: 'Blog', href: 'https://medium.com/@ishachaphekar', isExternal: true },
+    { id: 'blog', label: 'Blog', href: 'https://medium.com/@ishachaphekar/i-built-my-portfolio-with-ai-but-i-was-still-the-designer-9352ed058c39', isExternal: true },
   ];
 
   return (
