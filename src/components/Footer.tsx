@@ -77,7 +77,7 @@ export const Footer: React.FC = () => {
             </p>
           </div>
 
-          {/* LinkedIn & Behance Rounded Rectangle Icon Buttons */}
+          {/* LinkedIn, Behance & Medium Rounded Rectangle Icon Buttons */}
           <div className="flex items-center gap-3.5">
             {/* LinkedIn Icon Button */}
             <a
@@ -105,6 +105,21 @@ export const Footer: React.FC = () => {
               <img
                 src="/behance-icon.png"
                 alt="Behance"
+                className="w-5 h-4 object-contain brightness-0 invert group-hover:opacity-80 transition-opacity"
+              />
+            </a>
+
+            {/* Medium Icon Button */}
+            <a
+              href="https://medium.com/@ishachaphekar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-xl border-[0.5px] border-[#F4F4F4] bg-transparent flex items-center justify-center p-2.5 hover:border-mint transition-all group"
+              aria-label="Medium Profile"
+            >
+              <img
+                src="/Medium%20Icon.png"
+                alt="Medium"
                 className="w-5 h-4 object-contain brightness-0 invert group-hover:opacity-80 transition-opacity"
               />
             </a>
